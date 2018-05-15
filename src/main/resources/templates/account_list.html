@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	  lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Accounts</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<link rel="stylesheet" type="text/css" media="all"
+		  href="../static/css/main.css" th:href="@{/css/main.css}"/>
+</head>
+<body>
+<table>
+	<h3 th:if="${message ne null}" th:text="${message}"></h3>
+
+	<form action="account_list.html" th:action="@{/accounts}" th:object="${account}" method="post">
+		<p>Account Number: <input type="text" th:field="*{accountNumber}"/></p>
+		<p>IBAN: <input type="text" th:field="*{iban}"/></p>
+		<p><input type="submit" value="Submit"/></p>
+	</form>
+
+	<div th:if="${accounts.size()} &gt; 0">
+		<tr>
+			<th>Account Number</th>
+			<th>IBAN</th>
+			<th>Bank Name</th>
+			<th>BIC</th>
+		</tr>
+		<tr th:each="acc : ${accounts}">
+			<td th:text="${acc.accountNumber}"></td>
+			<td th:text="${acc.iban}"></td>
+			<td th:text="${acc.bank.name}"></td>
+			<td th:text="${acc.bank.bic}"></td>
+		</tr>
+	</div>
+</table>
+</body>
+</html>
