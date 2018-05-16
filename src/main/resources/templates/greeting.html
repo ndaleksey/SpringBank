@@ -1,20 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
-<head ng-app="demo">
+<head>
 	<meta charset="UTF-8">
 	<title>Greeting</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.3/angular.min.js"></script>
-	<script src="hello.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<link href="css/main.css" type="text/css">
 </head>
 <body>
-<h3>Greeting page</h3>
 
-<body>
-<div ng-controller="Hello">
-	<p>The ID is {{greeting.id}}</p>
-	<p>The content is {{greeting.content}}</p>
+<div ng-app="bankApp" ng-controller="HelloController">
+	<p>{{message}}</p>
 </div>
-</body>
 
+<script src="js/app.js"></script>
 </body>
 </html>
