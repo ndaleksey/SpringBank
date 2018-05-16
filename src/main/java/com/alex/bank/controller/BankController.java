@@ -58,9 +58,4 @@ public class BankController {
 
 		return "redirect:/accounts";
 	}
-
-	@PostMapping
-	public void editAccount(@ModelAttribute Account account, Model model) {
-
-	}
 }
