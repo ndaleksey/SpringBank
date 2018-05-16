@@ -3,53 +3,64 @@ package com.alex.bank.service.impl;
 import com.alex.bank.model.Account;
 import com.alex.bank.model.Bank;
 import com.alex.bank.repository.AccountRepository;
+import com.alex.bank.repository.BankRepository;
 import com.alex.bank.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import java.util.ArrayList;
+import javax.annotation.PostConstruct;
+import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by Shishkov A.V. on 15.05.18.
  */
 @Controller
 public class DefaultAccountService implements AccountService {
-	private List<Account> accounts = new ArrayList<>();
 
 	@Autowired
-	AccountRepository accountRepository;
+	private AccountRepository accountRepository;
+
+	@Autowired
+	private BankRepository bankRepository;
+
+	@PostConstruct
+	private void init() {
+		addMockAccounts();
+	}
 
 	@Override
 	public List<Account> getAllAccounts() {
-		return getMockAccounts();
+		return StreamSupport.stream(accountRepository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
 	@Override
 	public void addAccount(Account account) {
-		accounts.add(account);
+		accountRepository.save(account);
 	}
 
 	@Override
-	public Account findByAccountNumber(String number) {
+	public List<Account> findByAccountNumber(String number) {
 		if (number == null || number.isEmpty()) return null;
 
-		return accounts.stream().findFirst().filter(s -> s.getAccountNumber().equals(number)).get();
+		return accountRepository.findByAccountNumber(number);
 	}
 
-	private List<Account> getMockAccounts() {
-		Bank bankOfAmerica = new Bank(UUID.randomUUID(), "Bank Of America", "111111");
-		Bank bankOfChina = new Bank(UUID.randomUUID(), "Bank Of China", "222222");
+	private void addMockAccounts() {
+		Bank bankOfAmerica = new Bank("Bank Of America", "111111");
+		Bank bankOfChina = new Bank("Bank Of China", "222222");
 
-		Account alex = new Account(UUID.randomUUID(), "1", "111111-1", bankOfAmerica);
-		Account nick = new Account(UUID.randomUUID(), "2", "111111-2", bankOfAmerica);
-		Account will = new Account(UUID.randomUUID(), "4", "222222-4", bankOfChina);
+		Account alex = new Account("1", "111111-1");
+		Account nick = new Account("2", "111111-2");
+		Account will = new Account("4", "222222-4");
 
-		accounts.add(alex);
-		accounts.add(nick);
-		accounts.add(will);
+		bankOfAmerica.addAccount(alex);
+		bankOfAmerica.addAccount(nick);
 
-		return accounts;
+		bankOfChina.addAccount(will);
+
+		bankRepository.saveAll(Arrays.asList(bankOfAmerica, bankOfChina));
 	}
 }

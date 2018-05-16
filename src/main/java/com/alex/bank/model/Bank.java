@@ -1,34 +1,35 @@
 package com.alex.bank.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.UUID;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Shishkov A.V. on 15.05.18.
  */
 @Entity
 public class Bank {
-	private UUID id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
 	private String name;
+
 	private String bic;
 
-	public Bank(UUID id, String name, String bic) {
-		this.id = id;
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "bank", fetch = FetchType.EAGER)
+	private Set<Account> accounts = new HashSet<>();
+
+	public Bank() {
+	}
+
+	public Bank(String name, String bic) {
 		this.name = name;
 		this.bic = bic;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public UUID getId() {
+	public Long getId() {
 		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -45,5 +46,25 @@ public class Bank {
 
 	public void setBic(String bic) {
 		this.bic = bic;
+	}
+
+	public Set<Account> getAccounts() {
+		return accounts;
+	}
+
+	public void setAccounts(Set<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	public void addAccount(Account account) {
+		account.setBank(this);
+		accounts.add(account);
+	}
+
+	public void removeAccount(Account account) {
+		if (account == null) return;
+
+		accounts.remove(account);
+		account.setBank(null);
 	}
 }

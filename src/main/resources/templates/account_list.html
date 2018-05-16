@@ -10,11 +10,18 @@
 </head>
 <body>
 <table>
-	<h3 th:if="${message ne null}" th:text="${message}"></h3>
+	<h3 th:if="${message ne null}" th:text="${message}">MESSAGE</h3>
 
-	<form action="account_list.html" th:action="@{/accounts}" th:object="${account}" method="post">
-		<p>Account Number: <input type="text" th:field="*{accountNumber}"/></p>
-		<p>IBAN: <input type="text" th:field="*{iban}"/></p>
+	<form action="#" th:action="@{/accounts}" th:object="${account}" method="post">
+		<p>Account Number: <input type="text" th:field="*{accountNumber}" placeholder="Account Number"/></p>
+		<p>IBAN: <input type="text" th:field="*{iban}" placeholder="IBAN"/></p>
+		<p>Bank:
+			<select th:field="*{bank}">
+				<option th:each="b : ${banks}"
+						th:value="${b.id}"
+						th:text="${b.name}"></option>
+			</select>
+		</p>
 		<p><input type="submit" value="Submit"/></p>
 	</form>
 
@@ -30,6 +37,9 @@
 			<td th:text="${acc.iban}"></td>
 			<td th:text="${acc.bank.name}"></td>
 			<td th:text="${acc.bank.bic}"></td>
+		</tr>
+		<tr>
+			<td><button type="button" th:action="@{/edit_account}"></button></td>
 		</tr>
 	</div>
 </table>

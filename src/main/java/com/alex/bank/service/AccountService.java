@@ -13,6 +13,6 @@ public interface AccountService {
 
 	void addAccount(Account account);
 
-	Account findByAccountNumber(String number);
+	List<Account> findByAccountNumber(String number);
 
 }

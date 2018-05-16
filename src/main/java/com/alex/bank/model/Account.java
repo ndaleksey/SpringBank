@@ -1,36 +1,33 @@
 package com.alex.bank.model;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 /**
  * Created by Shishkov A.V. on 15.05.18.
  */
 @Entity
 public class Account {
-	private UUID id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
 	private String accountNumber;
+
 	private String iban;
+
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Bank bank;
 
 	public Account() {
 	}
 
-	public Account(UUID id, String accountNumber, String iban, Bank bank) {
-		this.id = id;
+	public Account(String accountNumber, String iban) {
 		this.accountNumber = accountNumber;
 		this.iban = iban;
-		this.bank = bank;
 	}
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public UUID getId() {
+	public Long getId() {
 		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
 	}
 
 	public String getAccountNumber() {
@@ -49,7 +46,6 @@ public class Account {
 		this.iban = iban;
 	}
 
-	@ManyToOne
 	public Bank getBank() {
 		return bank;
 	}
